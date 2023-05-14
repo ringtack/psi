@@ -19,7 +19,6 @@ include(Curses)
 
 # add shared libraries
 set(SOURCES_SHARED
-  src-shared/circuit.cxx
   src-shared/messages.cxx
   src-shared/logger.cxx
   src-shared/util.cxx)

@@ -22,12 +22,12 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   std::string input_file = argv[1];
-  std::string type = argv[2];
+  std::string type_str = argv[2];
   PSIType type;
 
-  if (type == "I") {
+  if (type_str == "I") {
     type = PSIType::PSI_Intersection;
-  } else if (type == "CA") {
+  } else if (type_str == "CA") {
     type = PSIType::PSI_CA;
   } else {
     std::cout << "Invalid type" << std::endl;
