@@ -22,11 +22,13 @@
 
 namespace MessageType {
 enum T {
-    HMACTagged_Wrapper = 1,
-    DHPublicValue_Message = 2,
-    SenderToReceiver_PSI_Message = 3,
-    ReceiverToSender_PSI_Message = 4,
+  HMACTagged_Wrapper = 1,
+  DHPublicValue_Message = 2,
+  SenderToReceiver_PSI_Message = 3,
+  ReceiverToSender_PSI_Message = 4,
 };
+};
+
 MessageType::T get_message_type(std::vector<unsigned char> &data);
 
 // ================================================
@@ -34,8 +36,8 @@ MessageType::T get_message_type(std::vector<unsigned char> &data);
 // ================================================
 
 struct Serializable {
-    virtual void serialize(std::vector<unsigned char> &data) = 0;
-    virtual int deserialize(std::vector<unsigned char> &data) = 0;
+  virtual void serialize(std::vector<unsigned char> &data) = 0;
+  virtual int deserialize(std::vector<unsigned char> &data) = 0;
 };
 
 // serializers.
@@ -46,19 +48,20 @@ int put_integer(CryptoPP::Integer i, std::vector<unsigned char> &data);
 // deserializers
 int get_bool(bool *b, std::vector<unsigned char> &data, int idx);
 int get_string(std::string *s, std::vector<unsigned char> &data, int idx);
-int get_integer(CryptoPP::Integer *i, std::vector<unsigned char> &data, int idx);
+int get_integer(CryptoPP::Integer *i, std::vector<unsigned char> &data,
+                int idx);
 
 // ================================================
 // WRAPPERS
 // ================================================
 
 struct HMACTagged_Wrapper : public Serializable {
-    std::vector<unsigned char> payload;
-    CryptoPP::SecByteBlock iv;
-    std::string mac;
+  std::vector<unsigned char> payload;
+  CryptoPP::SecByteBlock iv;
+  std::string mac;
 
-    void serialize(std::vector<unsigned char> &data);
-    int deserialize(std::vector<unsigned char> &data);
+  void serialize(std::vector<unsigned char> &data);
+  int deserialize(std::vector<unsigned char> &data);
 };
 
 // ================================================
@@ -66,10 +69,10 @@ struct HMACTagged_Wrapper : public Serializable {
 // ================================================
 
 struct DHPublicValue_Message : public Serializable {
-    CryptoPP::SecByteBlock public_value;
+  CryptoPP::SecByteBlock public_value;
 
-    void serialize(std::vector<unsigned char> &data);
-    int deserialize(std::vector<unsigned char> &data);
+  void serialize(std::vector<unsigned char> &data);
+  int deserialize(std::vector<unsigned char> &data);
 };
 
 // ================================================
@@ -77,22 +80,22 @@ struct DHPublicValue_Message : public Serializable {
 // ================================================
 
 enum class PSIType {
-    PSI_Intersection = 1,
-    PSI_CA = 2,
+  PSI_Intersection = 1,
+  PSI_CA = 2,
 };
 
 struct SenderToReceiver_PSI_Message : public Serializable {
-    PSIType type;
-    std::vector<CryptoPP::SecByteBlock> hashed_sender_inputs;
+  PSIType type;
+  std::vector<CryptoPP::SecByteBlock> hashed_sender_inputs;
 
-    void serialize(std::vector<unsigned char> &data);
-    int deserialize(std::vector<unsigned char> &data);
+  void serialize(std::vector<unsigned char> &data);
+  int deserialize(std::vector<unsigned char> &data);
 };
 
 struct ReceiverToSender_PSI_Message : public Serializable {
-    std::vector<CryptoPP::SecByteBlock> hashed_sender_inputs;
-    std::vector<CryptoPP::SecByteBlock> hashed_receiver_inputs;
+  std::vector<CryptoPP::SecByteBlock> hashed_sender_inputs;
+  std::vector<CryptoPP::SecByteBlock> hashed_receiver_inputs;
 
-    void serialize(std::vector<unsigned char> &data);
-    int deserialize(std::vector<unsigned char> &data);
+  void serialize(std::vector<unsigned char> &data);
+  int deserialize(std::vector<unsigned char> &data);
 };

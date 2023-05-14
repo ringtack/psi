@@ -41,4 +41,4 @@ void print_key_as_hex(const CryptoPP::SecByteBlock &block);
 std::vector<std::string> string_split(std::string str, char delimiter);
 
 // Input parser.
-std::vector<string> parse_input(std::string input_file);
+std::vector<std::string> parse_input(std::string input_file);

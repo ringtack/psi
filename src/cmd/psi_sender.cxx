@@ -9,32 +9,46 @@
 #include "../../include/pkg/psi_sender.hpp"
 
 /*
- * Usage: ./psi_sender <input file> <address> <port>
+ * Usage: ./psi_sender <input file> <psi_type> <address> <port>
  */
 int main(int argc, char *argv[]) {
-    // Initialize logger
-    initLogger();
+  // Initialize logger
 
-    // Parse args
-    if (argc != 4) {
-        std::cout << "Usage: ./psi_sender <input file> <address> <port>" << std::endl;
-        return 1;
-    }
-    std::string input_file = argv[1];
+  // Parse args
+  if (argc != 5) {
+    std::cout
+        << "Usage: ./psi_sender <input file> <psi_type: I CA> <address> <port>"
+        << std::endl;
+    return 1;
+  }
+  std::string input_file = argv[1];
+  std::string type = argv[2];
+  PSIType type;
 
-    std::string address = argv[2];
-    int port = atoi(argv[3]);
+  if (type == "I") {
+    type = PSIType::PSI_Intersection;
+  } else if (type == "CA") {
+    type = PSIType::PSI_CA;
+  } else {
+    std::cout << "Invalid type" << std::endl;
+    return 1;
+  }
 
-    // Parse input.
-    std::vector<string> string_set = parse_input(input_file);
+  std::string address = argv[3];
+  int port = atoi(argv[4]);
 
-    // Connect to network driver.
-    std::shared_ptr<NetworkDriver> network_driver = std::make_shared<NetworkDriverImpl>();
-    network_driver->listen(port);
-    std::shared_ptr<CryptoDriver> crypto_driver = std::make_shared<CryptoDriver>();
+  // Parse input.
+  std::vector<std::string> string_set = parse_input(input_file);
 
-    // Create garbler then run.
-    PSISender sender = PSISender(string_set, network_driver, crypto_driver);
-    sender.run();
-    return 0;
+  // Connect to network driver.
+  std::shared_ptr<NetworkDriver> network_driver =
+      std::make_shared<NetworkDriverImpl>();
+  network_driver->listen(port);
+  std::shared_ptr<CryptoDriver> crypto_driver =
+      std::make_shared<CryptoDriver>();
+
+  // Create sender then run.
+  PSISender sender = PSISender(string_set, network_driver, crypto_driver);
+  sender.run(type);
+  return 0;
 }
