@@ -10,7 +10,7 @@ set(LIBRARY_NAME_SHARED psi_app_lib_shared)
 # packages
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 include(Boost)
-include(Cryptopp)
+# include(Cryptopp)
 include(CTest)
 include(Doctest)
 include(Documentation)
@@ -26,7 +26,7 @@ add_library(${LIBRARY_NAME_SHARED} ${SOURCES_SHARED})
 target_include_directories(${LIBRARY_NAME_SHARED} PUBLIC ${PROJECT_SOURCE_DIR}/include-shared)
 target_link_libraries(${LIBRARY_NAME_SHARED} PUBLIC doctest)
 target_link_libraries(${LIBRARY_NAME_SHARED} PRIVATE cryptopp)
-target_link_libraries(${LIBRARY_NAME_SHARED} PRIVATE cryptopp-shared)
+# target_link_libraries(${LIBRARY_NAME_SHARED} PRIVATE cryptopp-shared)
 target_link_libraries(${LIBRARY_NAME_SHARED} PRIVATE ${Boost_LIBRARIES})
 target_link_libraries(${LIBRARY_NAME_SHARED} PRIVATE ${CURSES_LIBRARIES})
 
@@ -47,7 +47,7 @@ target_link_libraries(${SENDER_EXEC_NAME} PRIVATE ${LIBRARY_NAME})
 
 # add psi receiver executables
 add_executable(${RECEIVER_EXEC_NAME} src/cmd/psi_receiver.cxx)
-target_link_libraries(${SENDER_EXEC_NAME} PRIVATE ${LIBRARY_NAME})
+target_link_libraries(${RECEIVER_EXEC_NAME} PRIVATE ${LIBRARY_NAME})
 
 # add ot test executables
 # if ( "$ENV{CS1515_TA_MODE}" STREQUAL "on" )

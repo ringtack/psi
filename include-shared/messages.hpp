@@ -14,8 +14,6 @@
 #include <crypto++/integer.h>
 #include <crypto++/nbtheory.h>
 
-#include "../include-shared/circuit.hpp"
-
 // ================================================
 // MESSAGE TYPES
 // ================================================

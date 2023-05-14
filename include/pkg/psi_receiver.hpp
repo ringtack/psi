@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../include-shared/circuit.hpp"
+#include "../../include-shared/util.hpp"
 #include "../../include/drivers/cli_driver.hpp"
 #include "../../include/drivers/crypto_driver.hpp"
 #include "../../include/drivers/network_driver.hpp"

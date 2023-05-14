@@ -85,35 +85,41 @@ void PSISender::run(PSIType type) {
 
   std::set<std::string> receiver_inputs;
   for (auto &&hashed_input : receiver_msg.hashed_receiver_inputs) {
-    receiver_inputs.insert(byteblock_to_string(hashed_input));
+    auto exp_input = CryptoPP::ModularExponentiation(
+        byteblock_to_integer(hashed_input), k, DL_Q);
+    receiver_inputs.insert(
+        byteblock_to_string(integer_to_byteblock(exp_input)));
   }
 
   if (type == PSIType::PSI_Intersection) {
     std::vector<std::string> res;
 
     for (int i = 0; i < receiver_msg.hashed_sender_inputs.size(); i++) {
-      if (receiver_inputs.contains(
-              byteblock_to_string(receiver_msg.hashed_sender_inputs[i]))) {
+      auto hashed_input =
+          byteblock_to_string(receiver_msg.hashed_sender_inputs[i]);
+
+      if (receiver_inputs.contains(hashed_input)) {
         res.push_back(this->input_set[i]);
       }
     }
     // verify the output to make sure that it's correct
+    this->cli_driver->print_info("The following values are in both sets:");
     for (auto str : res) {
-      this->cli_driver->print_info(str);
+      this->cli_driver->print_info("- " + str);
     }
   } else {
-    std::set<std::string> sender_inputs;
-    for (auto &&hashed_input : sender_msg.hashed_sender_inputs) {
-      sender_inputs.insert(byteblock_to_string(hashed_input));
+    int count = 0;
+
+    for (int i = 0; i < receiver_msg.hashed_sender_inputs.size(); i++) {
+      auto hashed_input =
+          byteblock_to_string(receiver_msg.hashed_sender_inputs[i]);
+
+      if (receiver_inputs.contains(hashed_input)) {
+        count++;
+      }
     }
 
-    std::vector<std::string> intersection;
-    std::set_intersection(sender_inputs.begin(), sender_inputs.end(),
-                          receiver_inputs.begin(), receiver_inputs.end(),
-                          std::inserter(intersection, intersection.begin()));
-
-    this->cli_driver->print_info("Intersection size: " +
-                                 std::to_string(intersection.size()));
+    this->cli_driver->print_info("Intersection size: " + std::to_string(count));
   }
 
   this->network_driver->disconnect();

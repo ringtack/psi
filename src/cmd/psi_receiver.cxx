@@ -3,10 +3,11 @@
 #include <iostream>
 #include <string>
 
-#include "../../include-shared/circuit.hpp"
 #include "../../include-shared/logger.hpp"
 #include "../../include-shared/util.hpp"
 #include "../../include/pkg/psi_receiver.hpp"
+
+// std::vector<std::string> parse_input(std::string input_file);
 
 /*
  * Usage: ./psi_receiver <input file> <address> <port>
@@ -34,7 +35,7 @@ int main(int argc, char *argv[]) {
       std::make_shared<CryptoDriver>();
 
   // Create PSI receiver then run.
-  PSIReceiver receiver = PSIReceiver(string_set, network_driver, crypto_driver);
+  PSIReceiver receiver(string_set, network_driver, crypto_driver);
   receiver.run();
   return 0;
 }

@@ -3,10 +3,11 @@
 #include <iostream>
 #include <string>
 
-#include "../../include-shared/circuit.hpp"
 #include "../../include-shared/logger.hpp"
 #include "../../include-shared/util.hpp"
 #include "../../include/pkg/psi_sender.hpp"
+
+// std::vector<std::string> parse_input(std::string input_file);
 
 /*
  * Usage: ./psi_sender <input file> <psi_type> <address> <port>
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]) {
   int port = atoi(argv[4]);
 
   // Parse input.
-  std::vector<std::string> string_set = parse_input(input_file);
+  auto string_set = parse_input(input_file);
 
   // Connect to network driver.
   std::shared_ptr<NetworkDriver> network_driver =
@@ -48,7 +49,7 @@ int main(int argc, char *argv[]) {
       std::make_shared<CryptoDriver>();
 
   // Create sender then run.
-  PSISender sender = PSISender(string_set, network_driver, crypto_driver);
+  PSISender sender(string_set, network_driver, crypto_driver);
   sender.run(type);
   return 0;
 }
