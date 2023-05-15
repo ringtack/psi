@@ -49,7 +49,7 @@ PSISender::HandleKeyExchange() {
 
 /**
  */
-void PSISender::run(PSIType type) {
+void PSISender::run(PSIType type, std::string out_file) {
   // Key exchange
   auto keys = this->HandleKeyExchange();
   std::tie(this->AES_key, this->HMAC_key) = keys;
@@ -92,21 +92,24 @@ void PSISender::run(PSIType type) {
   }
 
   if (type == PSIType::PSI_Intersection) {
-    std::vector<std::string> res;
+    std::set<std::string> res;
 
     for (int i = 0; i < receiver_msg.hashed_sender_inputs.size(); i++) {
       auto hashed_input =
           byteblock_to_string(receiver_msg.hashed_sender_inputs[i]);
 
       if (receiver_inputs.contains(hashed_input)) {
-        res.push_back(this->input_set[i]);
+        res.insert(this->input_set[i]);
       }
     }
     // verify the output to make sure that it's correct
-    this->cli_driver->print_info("The following values are in both sets:");
+    // this->cli_driver->print_info("The following values are in both sets:");
     for (auto str : res) {
-      this->cli_driver->print_info("- " + str);
+      this->cli_driver->print_info(str);
     }
+
+    // Write to output file
+    write_to_file(out_file, std::vector<std::string>(res.begin(), res.end()));
   } else {
     int count = 0;
 

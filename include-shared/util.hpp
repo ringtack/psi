@@ -42,3 +42,6 @@ std::vector<std::string> string_split(std::string str, char delimiter);
 
 // Input parser.
 std::vector<std::string> parse_input(std::string input_file);
+
+// Write to output file
+void write_to_file(std::string out_file, std::vector<std::string> output);

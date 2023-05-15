@@ -16,7 +16,7 @@ public:
     this->cli_driver = std::make_shared<CLIDriver>();
   }
 
-  void run(PSIType type);
+  void run(PSIType type, std::string out_file);
   std::pair<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> HandleKeyExchange();
 
 private:
